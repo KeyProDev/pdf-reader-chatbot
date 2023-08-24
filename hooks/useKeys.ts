@@ -9,10 +9,11 @@ interface Keys {
   pineconeEnvironment: string;
   setPineconeEnvironment: (key: string) => void;
   pineconeIndexName: string;
-  typeOfFile:string;
+  typeOfFile: string;
   setPineconeIndexName: (key: string) => void;
   handleKeyChange: (storageKey: string, keyValue: string) => void;
   handleSubmitKeys: () => void;
+  fileUri: string;
 }
 
 const useKeys = (): Keys => {
@@ -21,7 +22,8 @@ const useKeys = (): Keys => {
     pineconeApiKey: getItem('pineconeApiKey') || '',
     pineconeEnvironment: getItem('pineconeEnvironment') || '',
     pineconeIndexName: getItem('pineconeIndexName') || '',
-    typeOfFile: getItem('typeOfFile') || ''
+    typeOfFile: getItem('typeOfFile') || '',
+    fileUri: getItem('fileUri') || ''
   });
 
   const setKey = (keyName: string, keyValue: string) => {

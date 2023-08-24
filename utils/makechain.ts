@@ -17,6 +17,10 @@ Context: {context}
 Here is the user's question:
 Question: {question}`;
 
+const SUMMARY_PROMPT = `You are an intelligent AI assistant designed to provide summaries of various types of content. Your mission is to generate concise and accurate summaries based on the given input.
+Here is the context from the documents:
+Context: {context}`
+
 // Creates a ConversationalRetrievalQAChain object that uses an OpenAI model and a PineconeStore vectorstore
 export const makeChain = (
   vectorstore: PineconeStore,
@@ -36,7 +40,7 @@ export const makeChain = (
     model,
     vectorstore.asRetriever(),
     {
-      qaTemplate: QA_PROMPT,
+      qaTemplate: SUMMARY_PROMPT,
       questionGeneratorTemplate: CONDENSE_PROMPT,
       returnSourceDocuments,
     },
