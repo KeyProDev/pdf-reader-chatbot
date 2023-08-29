@@ -11,13 +11,10 @@ type ChatFormProps = {
   loading: boolean;
   error: string | null;
   query: string;
-  textAreaRef: React.RefObject<HTMLTextAreaElement>;
   handleEnter: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   setQuery: (query: string) => void;
 };
-
-
 
 const ChatForm = ({
   loading,
@@ -34,51 +31,15 @@ const ChatForm = ({
     input.type = 'file';
     input.accept = 'text/plain';
     input.click();
-  
+
     let file = '';
-    input.onchange = handleOpenFile;
   }
-  
-  const handleOpenFile = (event:any) => {
-    const file = event.target.files[0];
- 
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        setQuery(event.target.result);
-      }
-
-      reader.readAsText(file);
-    }
-    
-  }
-  const adjustTextareaHeight = useCallback(() => {
-    if (otherRef.current) {
-      otherRef.current.style.height = 'auto';
-      const computed = window.getComputedStyle(otherRef.current);
-      const height =
-        otherRef.current.scrollHeight +
-        parseInt(computed.getPropertyValue('border-top-width'), 10) +
-        parseInt(computed.getPropertyValue('padding-top'), 10) +
-        parseInt(computed.getPropertyValue('padding-bottom'), 10) +
-        parseInt(computed.getPropertyValue('border-bottom-width'), 10);
-
-      otherRef.current.style.height = height > 250 ? '250px' : `${height}px`;
-    }
-  }, [otherRef]);
-
-  useEffect(() => {
-    adjustTextareaHeight();
-  }, [query, adjustTextareaHeight]);
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="items-center w-screen justify-center flex p-4 sm:px-4 sm:py-10"
+      className="items-center w-full justify-center flex pt-3"
     >
-      <label htmlFor="userInput" className="sr-only">
-        Your message
-      </label>
       <div className="flex w-full align-center justify-center max-w-3xl items-center rounded-lg bg-gray-170 shadow-2xl">
         <textarea
           disabled={loading}
@@ -95,8 +56,8 @@ const ChatForm = ({
             loading
               ? 'Waiting for response...'
               : error
-              ? 'Error occurred. Try again.'
-              : 'to open the saved file, please doble click here'
+                ? 'Error occurred. Try again.'
+                : 'Type your question'
           }
           value={query}
           onChange={(e) => setQuery(e.target.value)}

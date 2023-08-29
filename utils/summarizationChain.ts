@@ -5,7 +5,6 @@ export const makeSummarizationChain = (
     modelTemperature: number,
     openAIapiKey: string,
 ) => {
-    console.log('openAIapiKey1', openAIapiKey)
     const model = new OpenAI({
         temperature: modelTemperature,
         modelName: 'gpt-3.5-turbo',

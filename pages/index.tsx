@@ -3,7 +3,7 @@ import React, {
   useState,
 } from 'react';
 import { Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { Document } from 'langchain/document';
 
 import { Dialog } from '@headlessui/react';
@@ -14,6 +14,8 @@ import PdfEditor from '@/components/sidebar/components/PdfEditor';
 import DocEditor from '@/components/sidebar/components/DocEditor';
 import { registerLicense } from '@syncfusion/ej2-base';
 import Context from '@/context/context';
+import { EmptyState } from '@/components/main';
+import Chatbot from '@/components/main/ChatBot';
 
 registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cXGNCd0x0Rnxbf1xzZFRMZFRbQXZPMyBoS35RdUVrW3tecXFRR2lbUkZx');
 
@@ -21,11 +23,12 @@ registerLicense('Ngo9BigBOggjHTQxAR8/V1NGaF1cXGNCd0x0Rnxbf1xzZFRMZFRbQXZPMyBoS35
 export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File>();
+  const [fileName, setFileName] = useState('');
   const [fileUri, setFileUri] = useState('');
   const [fileType, setFileType] = useState('');
 
   return (
-    <Context.Provider value={{ fileUri, setFileUri, fileType, setFileType, file, setFile }}>
+    <Context.Provider value={{ fileUri, setFileUri, fileType, setFileType, fileName, setFileName, file, setFile }}>
       <div className="h-full">
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog as="div" onClose={setSidebarOpen}>
@@ -97,9 +100,23 @@ export default function Home() {
 
           <main className="flex flex-col">
             {
-              fileType === 'pdf' ? <PdfEditor /> : <DocEditor />
+              !!!fileType
+                ?
+                <div className="flex justify-center px-4 pt-24">
+                  <h1 className="text-xl md:text-3xl text-center font-semibold text-gray-100 mb-6">
+                    Choose your document file
+                  </h1>
+                </div>
+                :
+                fileType === 'pdf'
+                  ? <PdfEditor />
+                  : <DocEditor />
             }
           </main>
+
+          <div className="flex items-end justify-end fixed bottom-10 right-10 mt-6 mr-6 z-10">
+            <Chatbot />
+          </div>
         </div>
       </div>
     </Context.Provider>

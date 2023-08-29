@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Bars3Icon, Cog6ToothIcon, InboxArrowDownIcon} from '@heroicons/react/24/outline';
+import { Bars3Icon, Cog6ToothIcon, InboxArrowDownIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
-import {DownLoad_Modal} from '../download/download';
+import { DownLoad_Modal } from '../download/download';
 import Modal from '@mui/material/Modal';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import Popover from '@mui/material/Popover';
@@ -56,46 +56,6 @@ const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
           />
           <span>Settings</span>
         </button>
-        
-        <PopupState variant="popover" popupId="demo-popup-popover">
-            {(popupState) => (
-                <div>
-                    <button {...bindTrigger(popupState)}
-                      type="button"
-                      className="inline-flex items-center gap-x-1.5 rounded-md bg-indigo-600 px-2.5 py-1.5 text-xs sm:text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      // onClick={handleOpenDownLoad_Modal}
-                    >
-                      <InboxArrowDownIcon
-                        className="-ml-0.5 h-4 w-4 sm:w-5 sm:h-5"
-                        aria-hidden="true"
-                      />
-                      DownLoad
-
-                    </button>
-                    <Popover
-                        {...bindPopover(popupState)}
-                        anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                        }}
-                        
-                    >
-                        <DownLoad_Modal/>
-                    </Popover>
-                </div>
-                
-            )}
-        </PopupState>
-        {/* <Modal
-            open={showModal}
-            style={{position: 'fixed', top:'50px', alignItems:'center', justifyContent:'center'}}
-            onClose={() =>setShowModal(false)}
-            aria-labelledby="parent-modal-title"
-            aria-describedby="parent-modal-description"
-        >
-            <DownLoad_Modal/>
-        </Modal> */}
-
       </div>
     </div>
   );

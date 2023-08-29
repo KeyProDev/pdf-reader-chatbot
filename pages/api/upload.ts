@@ -2,6 +2,7 @@ import multiparty from 'multiparty';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
 import fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 interface UploadedFile {
   fieldName: string;
@@ -44,14 +45,15 @@ export default async function handler(
         // In local development, move the file from the OS temp directory to the project 'tmp' directory
         const projectTmpDir = path.join(process.cwd(), 'tmp');
         fs.mkdirSync(projectTmpDir, { recursive: true });
+        const newFileName = uuidv4();
 
         const newFilePath = path.join(
           projectTmpDir,
-          uploadedFile.originalFilename,
+          newFileName,
         );
         fs.copyFileSync(uploadedFile.path, newFilePath);
 
-        uploadedFiles.push(newFilePath);
+        uploadedFiles.push(newFileName);
       } else {
         // In production, just use the file as is
         uploadedFiles.push(uploadedFile.path);
@@ -61,6 +63,7 @@ export default async function handler(
     if (uploadedFiles.length > 0) {
       return res.status(200).json({
         message: `Files ${uploadedFiles.join(', ')} uploaded and moved!`,
+        fileName: uploadedFiles.pop()
       });
     } else {
       return res.status(400).json({ error: 'No files uploaded' });

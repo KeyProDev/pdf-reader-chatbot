@@ -1,6 +1,6 @@
 import { OpenAI } from 'langchain/llms/openai';
-import { PineconeStore } from 'langchain/vectorstores/pinecone';
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
+import { HNSWLib } from 'langchain/vectorstores/hnswlib';
 
 const CONDENSE_PROMPT = `Given the chat history and a follow-up question, rephrase the follow-up question to be a standalone question that encompasses all necessary context from the chat history.
 Chat History:
@@ -17,13 +17,9 @@ Context: {context}
 Here is the user's question:
 Question: {question}`;
 
-const SUMMARY_PROMPT = `You are an intelligent AI assistant designed to provide summaries of various types of content. Your mission is to generate concise and accurate summaries based on the given input.
-Here is the context from the documents:
-Context: {context}`
-
 // Creates a ConversationalRetrievalQAChain object that uses an OpenAI model and a PineconeStore vectorstore
 export const makeChain = (
-  vectorstore: PineconeStore,
+  vectorstore: HNSWLib,
   returnSourceDocuments: boolean,
   modelTemperature: number,
   openAIapiKey: string,
@@ -40,7 +36,7 @@ export const makeChain = (
     model,
     vectorstore.asRetriever(),
     {
-      qaTemplate: SUMMARY_PROMPT,
+      qaTemplate: QA_PROMPT,
       questionGeneratorTemplate: CONDENSE_PROMPT,
       returnSourceDocuments,
     },

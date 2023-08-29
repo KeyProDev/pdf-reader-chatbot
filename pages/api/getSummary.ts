@@ -3,6 +3,7 @@ import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { makeSummarizationChain } from '@/utils/summarizationChain';
+import { BufferLoader } from 'langchain/document_loaders/fs/buffer';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { DirectoryLoader } from 'langchain/document_loaders/fs/directory';
 import { DocxLoader } from 'langchain/document_loaders/fs/docx';
@@ -43,9 +44,10 @@ export default async function handler(
     await runMiddleware(req, res, cors)
 
     const openAIapiKey = req.headers['x-openai-key'];
-    const { fileUri } = req.body;
+    const { fileName, fileType, summaryMode, page, paragraph } = req.body;
     // Load PDF, DOCS, TXT, CSV files from the specified directory
-    const loader = new TextLoader(fileUri);
+
+    const loader = fileType === 'pdf' ? new PDFLoader(`${filePath}/${fileName}`) : new DocxLoader(`${filePath}/${fileName}`);
 
     const rawDocs = await loader.load();
 
@@ -53,8 +55,32 @@ export default async function handler(
     const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000 });
 
     const docs = await textSplitter.splitDocuments(rawDocs);
-    console.log('text', docs, rawDocs);
     const chain = makeSummarizationChain(0, openAIapiKey as string);
+    if (summaryMode === 'page' && page > 0 && page < docs.length) {
+        const pagedocs = docs.slice(page - 1, page)
+        console.log('pagedocs', pagedocs);
+        const response = await chain.call({
+            input_documents: pagedocs,
+        });
+        console.log('summarization response', response);
+        return res
+            .status(200)
+            .json({ summary: response.text });
+    }
+    if (summaryMode === 'paragraph' && page > 0 && page < docs.length) {
+        const paragraphdocs = [new Document({ pageContent: paragraph })];
+        console.log('paragraphdocs', paragraphdocs);
+        const response = await chain.call({
+            input_documents: paragraphdocs,
+        });
+        console.log('summarization response', response);
+        return res
+            .status(200)
+            .json({ summary: response.text });
+    }
+
+    console.log('filedoc', docs);
+
     const response = await chain.call({
         input_documents: docs,
     });

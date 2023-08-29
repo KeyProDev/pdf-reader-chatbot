@@ -5,6 +5,8 @@ interface ContextProps {
     setFileUri: (fileUri: string) => void;
     fileType: string;
     setFileType: (fileType: string) => void;
+    fileName: string;
+    setFileName: (fileName: string) => void;
     file: File;
     setFile: (file: File) => void;
 }
