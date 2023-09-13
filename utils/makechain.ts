@@ -10,11 +10,10 @@ Make sure your standalone question is self-contained, clear, and specific. Rephr
 
 // --------------------------------------------------
 
-const QA_PROMPT = `You are an intelligent AI assistant designed to interpret and answer questions and instructions by referring to specific provided documents. The context from these documents has been processed and made accessible to you. 
-Your mission is to answer the question of user using the context of the documents. This include translation the context or comparing and modifing the original and translation context. 
-Here is the context from the documents:
+const QA_PROMPT = `You are an AI assistant knowledgeable about contract laws in the United States. You can provide information and answer questions related to contract laws in different states.
+
 Context: {context}
-Here is the user's question:
+
 Question: {question}`;
 
 // Creates a ConversationalRetrievalQAChain object that uses an OpenAI model and a PineconeStore vectorstore
@@ -28,7 +27,7 @@ export const makeChain = (
     temperature: modelTemperature, // increase temepreature to get more creative answers
     modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
     // modelName: "text-davinci-003",
-    openAIApiKey: openAIapiKey
+    openAIApiKey: openAIapiKey,
   });
 
   // Configures the chain to use the QA_PROMPT and CONDENSE_PROMPT prompts and to not return the source documents
