@@ -1,6 +1,7 @@
 import '@/styles/base.css';
 import type { AppProps as NextAppProps } from 'next/app';
 import { Inter } from 'next/font/google';
+import { appWithTranslation } from 'next-i18next';
 
 type AppProps = NextAppProps;
 
@@ -17,4 +18,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

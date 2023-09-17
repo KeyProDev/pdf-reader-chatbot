@@ -59,7 +59,7 @@ export default async function handler(
   // Run the middleware
   await runMiddleware(req, res, cors);
 
-  const openAIapiKey = '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'; //req.headers['x-openai-key'];
+  const openAIapiKey = req.headers['x-openai-key'];
 
   if (!openAIapiKey) {
     return res.status(500).json({ error: 'OpenAI API key not set' });

@@ -1,28 +1,27 @@
 import React, { Fragment, useState } from 'react';
-import { Transition } from '@headlessui/react';
-import {
-  XMarkIcon,
-  ChatBubbleOvalLeftEllipsisIcon,
-} from '@heroicons/react/24/outline';
-import { Document } from 'langchain/document';
 
-import { Dialog } from '@headlessui/react';
+import { useRouter } from 'next/router';
+
+import { Transition, Dialog } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 import SidebarList from '@/components/sidebar/SidebarList';
-import Header from '@/components/header/Header';
 import PdfEditor from '@/components/sidebar/components/PdfEditor';
 import DocEditor from '@/components/sidebar/components/DocEditor';
-import { registerLicense } from '@syncfusion/ej2-base';
 import Context from '@/context/context';
-import { EmptyState } from '@/components/main';
 import Chatbot from '@/components/main/ChatBot';
 import ContractForm from '@/components/main/ContractForm';
+import { registerLicense } from '@syncfusion/ej2-base';
+import locales_data from '@/locales.json';
 
 registerLicense(
   'Ngo9BigBOggjHTQxAR8/V1NGaF1cXGNCd0x0Rnxbf1xzZFRMZFRbQXZPMyBoS35RdUVrW3tecXFRR2lbUkZx',
 );
 
 export default function Home() {
+  const router = useRouter();
+  const { locale, locales } = router;
+
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [file, setFile] = useState<File>();
   const [fileName, setFileName] = useState('');
@@ -121,7 +120,7 @@ export default function Home() {
             ) : (
               <div className="flex justify-center items-center px-4 min-h-full">
                 <h1 className="text-xl md:text-3xl text-center font-semibold text-gray-100 mb-6">
-                  CHOOSE YOUR DOCUMENT FILE
+                  {locales_data[locale]['main_placeholder']}
                 </h1>
               </div>
             )

@@ -9,8 +9,13 @@ import Button from '@/components/buttons/Button';
 import { useKeys } from '@/hooks';
 import Context from '@/context/context';
 import Divider from '../other/Divider';
+import { useRouter } from 'next/router';
+import locales_data from '@/locales.json';
 
 const SidebarList = () => {
+  const router = useRouter();
+  const { locales, locale, asPath } = router;
+
   const { openAIapiKey, handleKeyChange, handleSubmitKeys } = useKeys();
   const {
     fileName,
@@ -105,24 +110,34 @@ const SidebarList = () => {
       .catch((err) => setSummaryLoading(false));
   };
 
+  const handleLocaleChange = (e) => {
+    const selectedLocale = e.target.value;
+    router.push({ pathname: router.pathname, query: router.query }, undefined, {
+      locale: selectedLocale,
+    });
+  };
+
   return (
     <nav className="flex flex-col h-full">
       <div className="px-4">
         <form>
           <div>
-            <p className="text-white text-sm mb-2 text-lg">Language</p>
+            <p className="text-white text-sm mb-2 text-lg">
+              {locales_data[locale]['language']}
+            </p>
             <select
               id="language"
-              value={''}
-              onChange={(e) => {}}
-              className=" bg-gray-800 border-gray-700 text-white w-full rounded-md"
+              value={locale} // Assuming you have `locale` value available
+              onChange={handleLocaleChange} // Call the handleLocaleChange function on select change
+              className="bg-gray-800 border-gray-700 text-white w-full rounded-md"
             >
-              <option value="english">English</option>
-              <option value="spanish">Spanish</option>
-              <option value="chinese">Chinese</option>
-              <option value="japanese">Japanese</option>
-              <option value="german">German</option>
-              <option value="french">French</option>
+              {locales?.map((langCode, i) => {
+                return (
+                  <option key={i} value={langCode}>
+                    {locales_data[langCode]['lang']}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </form>
@@ -134,7 +149,7 @@ const SidebarList = () => {
         <div className="px-4 space-y-3">
           <Button
             buttonType="primary"
-            buttonText="Choose File"
+            buttonText={locales_data[locale]['choose_file']}
             icon={DocumentArrowUpIcon}
             onClick={handleChooseFileClick}
           />
@@ -146,22 +161,30 @@ const SidebarList = () => {
       <div className="px-4 ">
         <form>
           <div>
-            <p className="text-white text-sm mb-2 text-lg">Summarize mode</p>
+            <p className="text-white text-sm mb-2 text-lg">
+              {locales_data[locale]['summarize_mode']}
+            </p>
             <select
               id="summarize"
               value={summaryMode}
               onChange={handleSummaryModeChange}
               className=" bg-gray-800 border-gray-700 text-white w-full rounded-md"
             >
-              <option value="file">Entire File</option>
-              <option value="page">Page</option>
-              <option value="paragraph">Paragraph</option>
+              <option value="file">
+                {locales_data[locale]['entire_file']}
+              </option>
+              <option value="page">{locales_data[locale]['page']}</option>
+              <option value="paragraph">
+                {locales_data[locale]['paragraph']}
+              </option>
             </select>
           </div>
 
           {summaryMode === 'paragraph' && (
             <div>
-              <p className="text-white text-sm my-2 text-lg">Paragraph</p>
+              <p className="text-white text-sm my-2 text-lg">
+                {locales_data[locale]['paragraph']}
+              </p>
               <textarea
                 value={paragraph}
                 onChange={handleParagraphChange}
@@ -174,7 +197,9 @@ const SidebarList = () => {
 
           {summaryMode === 'page' && (
             <div>
-              <p className="text-white text-sm my-2 text-lg">Page Number</p>
+              <p className="text-white text-sm my-2 text-lg">
+                {locales_data[locale]['page_number']}
+              </p>
               <input
                 type="number"
                 className="w-full bg-transparent text-white rounded-lg px-2 py-1"
@@ -193,7 +218,7 @@ const SidebarList = () => {
             <div className="px-4 space-y-3">
               <Button
                 buttonType="secondary"
-                buttonText="Get Summary"
+                buttonText={locales_data[locale]['get_summary']}
                 onClick={handleGetSummary}
                 icon={
                   summaryLoading
@@ -212,7 +237,7 @@ const SidebarList = () => {
           <div className="px-4 space-y-3">
             <Button
               buttonType="primary"
-              buttonText="New Contract"
+              buttonText={locales_data[locale]['new_contract']}
               onClick={() => {
                 setIsNewContract(!isNewContract);
               }}

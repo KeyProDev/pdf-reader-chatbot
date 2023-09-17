@@ -2,8 +2,13 @@ import { useContext, useState } from 'react';
 import Datepicker from 'react-tailwindcss-datepicker';
 import Context from '@/context/context';
 import { useKeys } from '@/hooks';
+import locales_data from '@/locales.json';
+import { useRouter } from 'next/router';
 
 export default function ContractForm() {
+  const router = useRouter();
+  const { locales, locale, asPath } = router;
+
   const { setFile, setFileName, setFileType, setFileUri } = useContext(Context);
   const { openAIapiKey } = useKeys();
 
@@ -163,10 +168,10 @@ export default function ContractForm() {
         <div className="space-y-5">
           <div className="border-b border-white/10 pb-5">
             <h2 className="text-base font-semibold leading-7 text-white">
-              Create New Contract
+              {locales_data[locale]['create_new_contract']}
             </h2>
             <p className="mt-1 text-sm leading-6 text-gray-400">
-              Please fill in the fields with contract contents.
+              {locales_data[locale]['create_tooltip']}
             </p>
 
             <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -175,7 +180,7 @@ export default function ContractForm() {
                   htmlFor="category"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Type of Contract
+                  {locales_data[locale]['type_of_contract']}
                 </label>
                 <div className="mt-2">
                   <select
@@ -186,16 +191,28 @@ export default function ContractForm() {
                     value={selectedCategory}
                     onChange={handleCategoryChange}
                   >
-                    <option>Contract of Sale</option>
-                    <option>Employment Contract</option>
-                    <option>Non-Disclosure Agreement</option>
-                    <option>Real Estate Contracts</option>
-                    <option>Executory Contract</option>
-                    <option>Deed of Trust</option>
-                    <option>Mutual Agreements</option>
-                    <option>Time and Materials Contracts</option>
-                    <option>Prenuptials</option>
-                    <option>Music Business Contracts</option>
+                    <option>{locales_data[locale]['contract_of_sale']}</option>
+                    <option>
+                      {locales_data[locale]['employment_contract']}
+                    </option>
+                    <option>
+                      {locales_data[locale]['non-disclosure_agreement']}
+                    </option>
+                    <option>
+                      {locales_data[locale]['real_estate_contracts']}
+                    </option>
+                    <option>
+                      {locales_data[locale]['executory_contract']}
+                    </option>
+                    <option>{locales_data[locale]['deed_of_trust']}</option>
+                    <option>{locales_data[locale]['mutual_agreements']}</option>
+                    <option>
+                      {locales_data[locale]['time_and_materials_contracts']}
+                    </option>
+                    <option>{locales_data[locale]['prenuptials']}</option>
+                    <option>
+                      {locales_data[locale]['music_business_contracts']}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -205,7 +222,7 @@ export default function ContractForm() {
                   htmlFor="city"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  City
+                  {locales_data[locale]['city']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -225,7 +242,7 @@ export default function ContractForm() {
                   htmlFor="state"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  State
+                  {locales_data[locale]['state']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -245,7 +262,7 @@ export default function ContractForm() {
                   htmlFor="country"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Country
+                  {locales_data[locale]['country']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -264,7 +281,7 @@ export default function ContractForm() {
                   htmlFor="date"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Date
+                  {locales_data[locale]['date']}
                 </label>
                 <div className="mt-2">
                   <Datepicker
@@ -284,7 +301,7 @@ export default function ContractForm() {
                   htmlFor="personName1"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Your Name
+                  {locales_data[locale]['your_name']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -304,7 +321,7 @@ export default function ContractForm() {
                   htmlFor="companyName1"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Your Company's Name
+                  {locales_data[locale]["your_company's_name"]}
                 </label>
                 <div className="mt-2">
                   <input
@@ -324,7 +341,7 @@ export default function ContractForm() {
                   htmlFor="companyLocation1"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Your Company's Location
+                  {locales_data[locale]["your_company's_location"]}
                 </label>
                 <div className="mt-2">
                   <input
@@ -344,7 +361,7 @@ export default function ContractForm() {
                   htmlFor="personName2"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Involved Party's Person's Name
+                  {locales_data[locale]["involved_party's_person's_name"]}
                 </label>
                 <div className="mt-2">
                   <input
@@ -364,7 +381,7 @@ export default function ContractForm() {
                   htmlFor="companyName2"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Involved Party's Company's Name
+                  {locales_data[locale]["involved_party's_company's_name"]}
                 </label>
                 <div className="mt-2">
                   <input
@@ -384,7 +401,7 @@ export default function ContractForm() {
                   htmlFor="companyLocation2"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Involved Party's Company's Location
+                  {locales_data[locale]["involved_party's_company's_location"]}
                 </label>
                 <div className="mt-2">
                   <input
@@ -413,7 +430,7 @@ export default function ContractForm() {
                     htmlFor="sell-offer"
                     className="block text-sm font-medium leading-6 text-white"
                   >
-                    WHAT WILL YOUR COMPANY SELL
+                    {locales_data[locale]['what_will_your_company_sell']}
                   </label>
                 </div>
                 <div className="flex items-center gap-x-3">
@@ -429,7 +446,7 @@ export default function ContractForm() {
                     htmlFor="buy-offer"
                     className="block text-sm font-medium leading-6 text-white"
                   >
-                    WHAT WILL YOUR COMPANY BUY
+                    {locales_data[locale]['what_will_your_company_buy']}
                   </label>
                 </div>
               </div>
@@ -439,7 +456,9 @@ export default function ContractForm() {
                   htmlFor="psName"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  {sellOffer ? 'Seller Name' : 'Provider Name'}
+                  {sellOffer
+                    ? locales_data[locale]['seller_name']
+                    : locales_data[locale]['provider_name']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -458,7 +477,9 @@ export default function ContractForm() {
                   htmlFor="psTitle"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  {sellOffer ? 'Product Name' : 'Service Name'}
+                  {sellOffer
+                    ? locales_data[locale]['provider_name']
+                    : locales_data[locale]['service_name']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -477,7 +498,10 @@ export default function ContractForm() {
                   htmlFor="psDescription"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  {sellOffer ? 'Product' : 'Service'} Description and Details
+                  {sellOffer
+                    ? locales_data[locale]['product']
+                    : locales_data[locale]['service']}{' '}
+                  {locales_data[locale]['description_and_details']}
                 </label>
                 <div className="mt-2">
                   <textarea
@@ -496,11 +520,14 @@ export default function ContractForm() {
                   htmlFor="psQuantity"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  {sellOffer ? 'Product' : 'Service'} Quantity
+                  {sellOffer
+                    ? locales_data[locale]['product']
+                    : locales_data[locale]['service']}{' '}
+                  {locales_data[locale]['quantity']}
                 </label>
                 <div className="mt-2">
                   <input
-                    type="number"
+                    type="text"
                     name="psQuantity"
                     id="psQuantity"
                     value={psQuantity}
@@ -515,7 +542,7 @@ export default function ContractForm() {
                   htmlFor="price"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Price
+                  {locales_data[locale]['price']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -534,7 +561,7 @@ export default function ContractForm() {
                   htmlFor="timeframes"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Timeframes
+                  {locales_data[locale]['timeframes']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -553,7 +580,7 @@ export default function ContractForm() {
                   htmlFor="paymentType"
                   className="block text-sm font-medium leading-6 text-white"
                 >
-                  Type of Payment
+                  {locales_data[locale]['type_of_payment']}
                 </label>
                 <div className="mt-2">
                   <input
@@ -574,7 +601,7 @@ export default function ContractForm() {
                     className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={handleGenerateClick}
                   >
-                    Submit
+                    {locales_data[locale]['submit']}
                   </button>
                 </div>
               </div>

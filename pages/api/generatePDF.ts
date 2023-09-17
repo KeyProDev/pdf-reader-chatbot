@@ -51,17 +51,18 @@ export default async function handler(req, res) {
     });
     const docs = await textSplitter.splitDocuments(rawDocs);
 
-    const vectorStore = await HNSWLib.fromDocuments(
-      docs,
-      new OpenAIEmbeddings(),
-    );
-
     const model = new OpenAI({
       temperature: 0.9, // increase temepreature to get more creative answers
       modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
       // modelName: "text-davinci-003",
       openAIApiKey: openAIapiKey,
     });
+
+    const vectorStore = await HNSWLib.fromDocuments(
+      docs,
+      new OpenAIEmbeddings(),
+    );
+    console.log('generatepdf docs:', docs);
 
     const promptTemplate = `Given document is a contract template. Please use this template to generate a new contract with the below information. Ensure that the generated contract maintains the same size and style as the template contract.
     Type of Contract: ${selectedCategory}
@@ -100,39 +101,41 @@ export default async function handler(req, res) {
       maxTokens: null,
     });
 
-    const doc = new PDFDocument();
-    const newFileName = uuidv4();
+    console.log('response:', response);
 
-    // Set the appropriate HTTP headers for PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename=${newFileName}.pdf`,
-    );
+    // const doc = new PDFDocument();
+    // const newFileName = uuidv4();
 
-    // Create a write stream to save the PDF file
-    const writeStream = fs.createWriteStream(`./tmp/${newFileName}.pdf`);
+    // // Set the appropriate HTTP headers for PDF
+    // res.setHeader('Content-Type', 'application/pdf');
+    // res.setHeader(
+    //   'Content-Disposition',
+    //   `attachment; filename=${newFileName}.pdf`,
+    // );
 
-    // Pipe the PDF document to the write stream
-    doc.pipe(writeStream);
+    // // Create a write stream to save the PDF file
+    // const writeStream = fs.createWriteStream(`./tmp/${newFileName}.pdf`);
 
-    // Write content to the PDF
-    doc.fontSize(18).text(response.text);
-    // Finalize the PDF and close the write stream
-    doc.end();
-    writeStream.on('finish', async () => {
-      const fileContents = await fs.readFileSync(`./tmp/${newFileName}.pdf`);
-      res.status(200).json({
-        message: 'PDF saved successfully',
-        fileName: newFileName,
-        file: fileContents,
-      });
-    });
-    writeStream.on('error', (err) => {
-      res.status(500).json({ error: 'Failed to save PDF', details: err });
-    });
+    // // Pipe the PDF document to the write stream
+    // doc.pipe(writeStream);
+
+    // // Write content to the PDF
+    // doc.fontSize(18).text(response.text);
+    // // Finalize the PDF and close the write stream
+    // doc.end();
+    // writeStream.on('finish', async () => {
+    //   const fileContents = await fs.readFileSync(`./tmp/${newFileName}.pdf`);
+    //   res.status(200).json({
+    //     message: 'PDF saved successfully',
+    //     fileName: newFileName,
+    //     file: fileContents,
+    //   });
+    // });
+    // writeStream.on('error', (err) => {
+    //   res.status(500).json({ error: 'Failed to save PDF', details: err });
+    // });
   } catch (error: any) {
-    console.log('error', error);
+    console.log('error:', error);
     res.status(500).json({ error: error.message || 'Something went wrong' });
   }
 }
