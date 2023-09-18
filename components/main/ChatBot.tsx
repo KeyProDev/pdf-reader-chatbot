@@ -11,12 +11,13 @@ import React, {
   useState,
 } from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import { Document } from 'langchain/document';
+
 import ChatForm from './ChatForm';
 import MessageList from './MessageList';
 import { useKeys } from '@/hooks';
 import Context from '@/context/context';
 import { ConversationMessage } from '@/types/ConversationMessage';
-import { useChats } from '@/hooks';
 
 const Chatbot: React.FC = () => {
   const [showChat, setShowChat] = useState(false);
@@ -41,8 +42,7 @@ const Chatbot: React.FC = () => {
 
   const fullscreenHandle = useFullScreenHandle();
 
-  const { fileName, fileType, setFileUri, setFileType, setFile, setFileName } =
-    useContext(Context);
+  const { fileName, fileType } = useContext(Context);
 
   useEffect(() => {
     setConversation({
@@ -57,7 +57,6 @@ const Chatbot: React.FC = () => {
   }, [fileName]);
 
   const { openAIapiKey } = useKeys();
-  const { updateConversation } = useChats();
 
   const scrollRef = useRef();
 
@@ -65,11 +64,7 @@ const Chatbot: React.FC = () => {
 
   useEffect(() => {
     const handleFullScreenChange = () => {
-      const isFullScreen =
-        document.fullscreenElement ||
-        document.webkitFullscreenElement ||
-        document.mozFullScreenElement ||
-        document.msFullscreenElement;
+      const isFullScreen = Boolean(document.fullscreenElement);
       setFullscreen(isFullScreen);
     };
 
@@ -120,9 +115,6 @@ const Chatbot: React.FC = () => {
 
     setLoading(true);
     setQuery('');
-
-    const container = scrollRef.current; // Get a reference to the container
-    const maxScrollHeight = container.scrollHeight;
 
     if (!openAIapiKey) {
       console.error('API keys not found.');
@@ -175,7 +167,6 @@ const Chatbot: React.FC = () => {
     });
 
     setLoading(false);
-    scrollRef.current?.scrollTo({ top: maxScrollHeight, behavior: 'smooth' });
   }
 
   const handleEnter = (e: any) => {

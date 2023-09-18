@@ -287,8 +287,6 @@ export default function ContractForm() {
                   <Datepicker
                     asSingle
                     useRange={false}
-                    name="date"
-                    id="date"
                     value={date}
                     onChange={handleDateChange}
                     inputClassName="w-full rounded-md focus:ring-0 font-normal bg-white/5 py-1.5 text-white"

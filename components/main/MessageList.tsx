@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { LoadingDots } from '@/components/other';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/other/accordion/Accordion';
+
 import remarkGfm from 'remark-gfm';
-import { Message } from '@/types';
+import { ConversationMessage } from '@/types';
 import fileDialog from 'file-dialog';
 import NextNProgress from 'nextjs-progressbar';
 import nProgress from 'nprogress';
@@ -16,7 +11,7 @@ import ProgressBar from '@ramonak/react-progress-bar';
 import ReactLoading from 'react-loading';
 import { saveAs } from 'file-saver';
 interface MessageListProps {
-  messages: Message[];
+  messages: ConversationMessage[];
   loading: boolean;
   scrollRef: any;
 }

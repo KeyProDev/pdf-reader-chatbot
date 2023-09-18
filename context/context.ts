@@ -15,6 +15,21 @@ interface ContextProps {
   setContractData: (contractData: object) => void;
 }
 
-const Context = React.createContext<ContextProps | undefined>(undefined);
+const initialContext: ContextProps = {
+  fileUri: '',
+  setFileUri: () => {},
+  fileType: '',
+  setFileType: () => {},
+  fileName: '',
+  setFileName: () => {},
+  file: {} as File,
+  setFile: () => {},
+  isNewContact: false,
+  setIsNewContract: () => {},
+  contractData: {},
+  setContractData: () => {},
+};
+
+const Context = React.createContext<ContextProps>(initialContext);
 
 export default Context;

@@ -18,7 +18,7 @@ import {
 } from '@syncfusion/ej2-react-pdfviewer';
 import { useContext, useEffect, useRef, useState } from 'react';
 
-export default () => {
+const PDFEditor = () => {
   const myElementRef = useRef<PdfViewerComponent>(null);
 
   const [pdfreader, setPdfreader] = useState<any>();
@@ -94,3 +94,5 @@ export default () => {
     </PdfViewerComponent>
   );
 };
+
+export default PDFEditor;

@@ -103,37 +103,37 @@ export default async function handler(req, res) {
 
     console.log('response:', response);
 
-    // const doc = new PDFDocument();
-    // const newFileName = uuidv4();
+    const doc = new PDFDocument();
+    const newFileName = uuidv4();
 
-    // // Set the appropriate HTTP headers for PDF
-    // res.setHeader('Content-Type', 'application/pdf');
-    // res.setHeader(
-    //   'Content-Disposition',
-    //   `attachment; filename=${newFileName}.pdf`,
-    // );
+    // Set the appropriate HTTP headers for PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${newFileName}.pdf`,
+    );
 
-    // // Create a write stream to save the PDF file
-    // const writeStream = fs.createWriteStream(`./tmp/${newFileName}.pdf`);
+    // Create a write stream to save the PDF file
+    const writeStream = fs.createWriteStream(`./tmp/${newFileName}.pdf`);
 
-    // // Pipe the PDF document to the write stream
-    // doc.pipe(writeStream);
+    // Pipe the PDF document to the write stream
+    doc.pipe(writeStream);
 
-    // // Write content to the PDF
-    // doc.fontSize(18).text(response.text);
-    // // Finalize the PDF and close the write stream
-    // doc.end();
-    // writeStream.on('finish', async () => {
-    //   const fileContents = await fs.readFileSync(`./tmp/${newFileName}.pdf`);
-    //   res.status(200).json({
-    //     message: 'PDF saved successfully',
-    //     fileName: newFileName,
-    //     file: fileContents,
-    //   });
-    // });
-    // writeStream.on('error', (err) => {
-    //   res.status(500).json({ error: 'Failed to save PDF', details: err });
-    // });
+    // Write content to the PDF
+    doc.fontSize(18).text(response.text);
+    // Finalize the PDF and close the write stream
+    doc.end();
+    writeStream.on('finish', async () => {
+      const fileContents = await fs.readFileSync(`./tmp/${newFileName}.pdf`);
+      res.status(200).json({
+        message: 'PDF saved successfully',
+        fileName: newFileName,
+        file: fileContents,
+      });
+    });
+    writeStream.on('error', (err) => {
+      res.status(500).json({ error: 'Failed to save PDF', details: err });
+    });
   } catch (error: any) {
     console.log('error:', error);
     res.status(500).json({ error: error.message || 'Something went wrong' });

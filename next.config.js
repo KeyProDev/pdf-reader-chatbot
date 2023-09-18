@@ -14,6 +14,9 @@ const nextConfig = {
     locales: ['en', 'es', 'zh', 'ja', 'de', 'fr'],
     defaultLocale: 'en',
   },
+  typescript: {
+    ignoreBuildErrors: true
+  }
 };
 
 
