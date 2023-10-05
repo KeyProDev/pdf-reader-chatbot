@@ -44,7 +44,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const loader = new DocxLoader(`${filePath}/template.docx`);
+    const loader = new DocxLoader(`./template.docx`);
     const rawDocs = await loader.load();
     const textSplitter = new RecursiveCharacterTextSplitter({
       chunkSize: 1000,
