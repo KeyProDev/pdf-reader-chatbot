@@ -41,29 +41,26 @@ export default async function handler(
 
       const uploadedFile = file[0] as UploadedFile;
 
-      if (process.env.NODE_ENV !== 'production') {
-        // In local development, move the file from the OS temp directory to the project 'tmp' directory
-        const projectTmpDir = path.join(process.cwd(), 'tmp');
-        fs.mkdirSync(projectTmpDir, { recursive: true });
-        const newFileName = uuidv4();
+      // if (process.env.NODE_ENV !== 'production') {
+      // In local development, move the file from the OS temp directory to the project 'tmp' directory
+      const projectTmpDir = path.join(process.cwd(), 'tmp');
+      fs.mkdirSync(projectTmpDir, { recursive: true });
+      const newFileName = uuidv4();
 
-        const newFilePath = path.join(
-          projectTmpDir,
-          newFileName,
-        );
-        fs.copyFileSync(uploadedFile.path, newFilePath);
+      const newFilePath = path.join(projectTmpDir, newFileName);
+      fs.copyFileSync(uploadedFile.path, newFilePath);
 
-        uploadedFiles.push(newFileName);
-      } else {
-        // In production, just use the file as is
-        uploadedFiles.push(uploadedFile.path);
-      }
+      uploadedFiles.push(newFileName);
+      // } else {
+      // In production, just use the file as is
+      // uploadedFiles.push(uploadedFile.path);
+      // }
     }
 
     if (uploadedFiles.length > 0) {
       return res.status(200).json({
         message: `Files ${uploadedFiles.join(', ')} uploaded and moved!`,
-        fileName: uploadedFiles.pop()
+        fileName: uploadedFiles.pop(),
       });
     } else {
       return res.status(400).json({ error: 'No files uploaded' });
