@@ -25,6 +25,18 @@ const PDFEditor = () => {
 
   const { fileUri } = useContext(Context);
 
+  const extractTextCompleted = (args) => {
+    // Extract the Complete text of load document
+    console.log(args);
+    console.log(args.documentTextCollection[1]);
+    // Extract the Text data.
+    console.log(args.documentTextCollection[1][1].TextData);
+    // Extract Text in the Page.
+    console.log(args.documentTextCollection[1][1].PageText);
+    // Extract Text along with Bounds
+    console.log(args.documentTextCollection[1][1].TextData[0].Bounds);
+  };
+
   useEffect(() => {
     const reader = myElementRef.current;
     if (reader) {
@@ -57,6 +69,8 @@ const PDFEditor = () => {
       id="container"
       ref={myElementRef}
       documentPath=""
+      isExtractText={true}
+      extractTextCompleted={extractTextCompleted}
       contextMenuSettings={{
         contextMenuAction: 'RightClick',
         contextMenuItems: [

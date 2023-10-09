@@ -78,9 +78,11 @@
     "react-loading": "^2.0.3",
     "react-markdown": "^8.0.5",
     "react-modal": "^3.16.1",
+    "react-speech-kit": "^3.0.1",
     "react-tailwindcss-datepicker": "^1.6.6",
     "remark-gfm": "^3.0.1",
     "tailwind-merge": "^1.10.0",
+    "textract": "^2.5.0",
     "util": "^0.12.5",
     "uuidv4": "^6.2.13",
     "xlsx": "^0.18.5"

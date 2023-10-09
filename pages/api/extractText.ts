@@ -51,22 +51,6 @@ function runMiddleware(
   });
 }
 
-const getAPIkeyLimit = async (apikey: string) => {
-  try {
-    const response = await axios.get('https://api.openai.com/v1/usage', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apikey}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching API key limit:', error);
-    return null;
-  }
-};
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -74,20 +58,10 @@ export default async function handler(
   // Run the middleware
   await runMiddleware(req, res, cors);
 
-  const { question, history, fileName, fileType } = req.body;
-
-  const openAIapiKey = req.headers['x-openai-key'];
-
-  if (!openAIapiKey) {
-    return res.status(500).json({ error: 'OpenAI API key not set' });
-  }
+  const { fileName, fileType } = req.body;
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
-  }
-
-  if (!question) {
-    return res.status(400).json({ message: 'No question in the request' });
   }
 
   if (!fileName) {
@@ -97,8 +71,6 @@ export default async function handler(
   if (!fileType) {
     return res.status(400).json({ error: 'Required file type' });
   }
-
-  const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
 
   try {
     const loader =
@@ -110,22 +82,9 @@ export default async function handler(
       chunkSize: 1000,
     });
     const docs = await textSplitter.splitDocuments(rawDocs);
-
-    const vectorStore = await HNSWLib.fromDocuments(
-      docs,
-      new OpenAIEmbeddings(),
-    );
-
-    const chain = makeChain(vectorStore, true, 0.5, openAIapiKey as string);
-
-    const response = await chain.call({
-      question: sanitizedQuestion,
-      chat_history: history || [],
-    });
-
     res
       .status(200)
-      .json({ text: response.text, sourceDocuments: response.sourceDocuments });
+      .json({ text: docs.map((doc) => doc.pageContent).join('\n') });
   } catch (error: any) {
     console.log('error', error);
     res.status(500).json({ error: error.message || 'Something went wrong' });

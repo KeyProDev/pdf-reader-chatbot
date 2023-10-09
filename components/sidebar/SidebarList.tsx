@@ -3,6 +3,7 @@ import {
   DocumentArrowUpIcon,
   DocumentTextIcon,
   DocumentIcon,
+  SpeakerWaveIcon,
 } from '@heroicons/react/20/solid';
 import { LoadingDots } from '../other';
 import Button from '@/components/buttons/Button';
@@ -11,10 +12,12 @@ import Context from '@/context/context';
 import Divider from '../other/Divider';
 import { useRouter } from 'next/router';
 import locales_data from '@/locales.json';
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 const SidebarList = () => {
   const router = useRouter();
   const { locales, locale, asPath } = router;
+  const { speak } = useSpeechSynthesis();
 
   const { openAIapiKey, handleKeyChange, handleSubmitKeys } = useKeys();
   const {
@@ -115,6 +118,24 @@ const SidebarList = () => {
     router.push({ pathname: router.pathname, query: router.query }, undefined, {
       locale: selectedLocale,
     });
+  };
+
+  const speakDocument = () => {
+    fetch('/api/extractText', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fileName,
+        fileType,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        speak({ text: data.text });
+      })
+      .catch((err) => setSummaryLoading(false));
   };
 
   return (
@@ -242,6 +263,20 @@ const SidebarList = () => {
                 setIsNewContract(!isNewContract);
               }}
               icon={DocumentIcon}
+            />
+          </div>
+        </div>
+      )}
+
+      {fileName && (
+        <div>
+          <Divider />
+          <div className="px-4 space-y-3">
+            <Button
+              buttonType="primary"
+              buttonText={'Read'}
+              onClick={speakDocument}
+              icon={SpeakerWaveIcon}
             />
           </div>
         </div>
