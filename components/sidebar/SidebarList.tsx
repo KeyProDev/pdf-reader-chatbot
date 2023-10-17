@@ -73,7 +73,6 @@ const SidebarList = () => {
           const reader = new FileReader();
           reader.onload = function (evt) {
             setFileUri(evt?.target?.result as string);
-            console.log('this is file uri:', evt?.target?.result as string);
           };
 
           reader.readAsDataURL(file);

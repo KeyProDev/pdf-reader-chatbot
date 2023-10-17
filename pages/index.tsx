@@ -15,7 +15,7 @@ import { registerLicense } from '@syncfusion/ej2-base';
 import locales_data from '@/locales.json';
 
 registerLicense(
-  'Ngo9BigBOggjHTQxAR8/V1NGaF1cXGNCd0x0Rnxbf1xzZFRMZFRbQXZPMyBoS35RdUVrW3tecXFRR2lbUkZx',
+  'ORg4AjUWIQA/Gnt2VlhhQlJCfV5DQmJPYVF2R2BJflR0cF9HY0wgOX1dQl9gSH5ScUVhWHZddnddQmI=',
 );
 
 export default function Home() {
