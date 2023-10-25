@@ -31,7 +31,7 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 const cors = Cors({
   methods: ['POST', 'GET', 'HEAD'],
 });
-const filePath = process.env.NODE_ENV === 'production' ? '/tmp' : 'tmp';
+const filePath = process.env.NODE_ENV === 'production' ? '' : 'tmp';
 
 // Helper method to wait for a middleware to execute before continuing
 // And to throw an error when an error happens in a middleware
