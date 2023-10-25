@@ -17,7 +17,8 @@ import { useSpeechSynthesis } from 'react-speech-kit';
 const SidebarList = () => {
   const router = useRouter();
   const { locales, locale, asPath } = router;
-  const { speak } = useSpeechSynthesis();
+  const { speak, cancel, speaking } = useSpeechSynthesis();
+  const [isSpeaking, setIsSpeaking] = useState(false);
 
   const { openAIapiKey, handleKeyChange, handleSubmitKeys } = useKeys();
   const {
@@ -120,21 +121,27 @@ const SidebarList = () => {
   };
 
   const speakDocument = () => {
-    fetch('/api/extractText', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        fileName,
-        fileType,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        speak({ text: data.text });
+    if (isSpeaking) {
+      cancel();
+      setIsSpeaking(false);
+    } else {
+      fetch('/api/extractText', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fileName,
+          fileType,
+        }),
       })
-      .catch((err) => setSummaryLoading(false));
+        .then((res) => res.json())
+        .then((data) => {
+          speak({ text: data.text });
+          setIsSpeaking(true);
+        })
+        .catch((err) => setSummaryLoading(false));
+    }
   };
 
   return (
@@ -273,7 +280,7 @@ const SidebarList = () => {
           <div className="px-4 space-y-3">
             <Button
               buttonType="primary"
-              buttonText={'Read'}
+              buttonText={isSpeaking ? 'Stop' : 'Speak'}
               onClick={speakDocument}
               icon={SpeakerWaveIcon}
             />
