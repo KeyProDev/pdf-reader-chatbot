@@ -11,7 +11,7 @@ import process from 'process';
 import { DocxLoader } from 'langchain/document_loaders/fs/docx';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 
-const filePath = process.env.NODE_ENV === 'production' ? '/tmp' : 'tmp';
+const filePath = process.env.NODE_ENV === 'production' ? '' : 'tmp/';
 
 export default async function handler(req, res) {
   const {
